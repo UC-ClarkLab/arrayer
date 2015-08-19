@@ -1,0 +1,23 @@
+Objectives for Python-based High Content Image Analysis
+see: http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000603
+
+To Do: Function Modules Needed
+- Load image(s)
+- Plot histogram
+- Illumination correction (The illumination function can be calculated by median filtering or by fitting a polynomial or spline surface, with the latter two being more resilient to overfitting and therefore more robust. Lindblad)
+- Threshold foreground/background
+-- global threshold first?
+-- find local maxima?
+-- watershed?
+-- segmentation?
+-- measurement?
+- Split clusters of objects
+
+
+- Count cells
+- Determine size of objects
+- Determine object intensity
+- Measure shape descriptors (aspect ratio - width vs height, compactness - squared perimeter divided by the area, Zernike shape features)
+- Measure Texture (statistical texture descriptors such as moments of the intensity histogram, structural and spectral texture descriptors)
+- Clustering (number of neighboring objects, percent of perimeter touching neighbor objects, distance to nearest neighbor)
+- Machine-learning scoring/classification for image analysis

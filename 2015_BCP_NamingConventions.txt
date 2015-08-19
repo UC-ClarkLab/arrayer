@@ -1,0 +1,24 @@
+Naming convention rules:
+1. Avoid extra long folder names and complex hierarchical structures but use information-rich filenames instead.
+2. Put sufficient elements in the structure for easy retrieval and identification but do not overdo it.
+3. Use the underscore (_) as element delimiter. Do not use spaces or other characters such as: ! # $ % & ' @ ^ ` ~ + , . ; = ) (
+4. Use the hyphen (-) to delimit words within an element or capitalize the first letter of each word within an element.
+5. Elements should be ordered from general to specific detail of importance as much as possible.
+6. The order of importance rule holds true when elements include date and time stamps. Dates should be ordered: YEAR, MONTH, DAY. (e.g. YYYYMMDD, YYYYMMDD, YYYYMM). Time should be ordered: HOUR, MINUTES, SECONDS (HHMMSS).
+7. Personal names within an element should have family name first followed by first names or initials.
+8. Abbreviate the content of elements whenever possible.
+9. An element for version control should start with V followed by at least 2 digits and should be placed as the last most element. To distinguish between working drafts (i.e. minor revisions) use Vx-01->Vx-99 range and for final draft (i.e. major version release) use V1-00-> V9-xx. (where x =0-9)
+10. Prefix the names of the pertinent sub-folders to the file name of files that are being shared via email or portable storage devices.
+
+BRIAN'S FILE NAMING CONVENTIONS V01
+- DATE: YYYYMMDD, e.g. 20150115
+- PLATE FORMAT: 0000, e.g. 0532
+- CELL LINE: XXX, e.g. hiP (hiPSCs), rNP (rNPCs), hES (hESCs)
+- INITIALS: XXX, e.g. BCP
+- STAIN: XX, e.g. LD (Live/Dead), IM (Immunostaining), RE (Reporter cell line), Br (BrdU)
+- DESCRIPTIVE NAME: first one to two syllables of description, e.g. ToxScreen, DoseRe (Dose Response), Timelapse, Combin (Combinatorial), Timepoint
+- POSITION IN SERIES (if applicable): -00, e.g. 01
+
+example file name:
+20150115_0532_hiP_BCP_LD_ToxScreen-01
+20150115_0532_rNP__SKM_IM_DoseRe
