@@ -21,94 +21,130 @@ except ImportError:
 #    axrow[2].imshow(z, cmap=plt.cm.gray)
 
 # - MAIN - #
-location = 'home'
+#location = 'home'
+#
+#if location == 'home':
+#    platepath = 'B:\\Projects\\Research\\2015-05-11 AlyssaScreen1'
+#    outputpath = 'B:\\Projects\\Git\\clarklab.darkside\\0_Arrayer Package'
+#else:
+#    platepath = 'C:\\Users\\Brian\\Desktop\\Data For Analysis\\2015-05-11 AlyssaScreen1'
+#    outputpath = 'C:\\Users\\Brian\\Documents\\GitHub\\clarklab.darkside\\0_Arrayer Package'
+#
+#
+#output_filename = '2015-05-11 AlyssaScreen1.csv'
+#output_filepath = os.path.join(outputpath, output_filename)
 
-if location == 'home':
-    platepath = 'B:\\Projects\\Research\\2015-05-11 AlyssaScreen1'
-    outputpath = 'B:\\ownCloud\\0_Programming\\Research\\Image Processing\\Arrayer Package'
-else:
-    platepath = 'C:\Users\Brian\Desktop\Data For Analysis\2015-05-11 AlyssaScreen1'
-    outputpath = 'C:\Users\Brian\Documents\GitHub\clarklab.darkside\0_Arrayer Package'
-
-
-output_filename = '2015-05-11 AlyssaScreen1.csv'
-output_filepath = os.path.join(outputpath, output_filename)
-w1_files = ogre.iter_plate(platepath)
-w1_files_length = len(w1_files)
-
-columns = ["path", "file", "raw_dapi", "raw_fitc", "raw_texas", "live", "dead", "all"]
-df = pd.DataFrame(index=range(0, w1_files_length), columns=columns)
 #%%
-for f in w1_files:
-    row = w1_files.index(f)
-    path, name = os.path.split(f)
+#w1_files = ogre.iter_plate(platepath)
+#w1_files_length = len(w1_files)
+#
+#columns = ["path", "file", "raw_dapi", "raw_fitc", "raw_texas", "live", "dead", "all"]
+#df = pd.DataFrame(index=range(0, w1_files_length), columns=columns)
 
-    print "Status Update:"
-    print "File: {0}".format(f)
-    print "Item: {0}/{1}".format(row, w1_files_length)
-
-    img = ogre.site_to_array(f)
-
-    b = img[:, :, 0] # DAPI
-    g = img[:, :, 1] # FITC
-    r = img[:, :, 2] # TexasRed
-
-    bc = ogre.correct_illumination(b)
-    bcmask = ogre.adapt_thresh(bc)
-    blabs, bprops = ogre.watershed_label(bcmask, bc)
-
-    gc = ogre.correct_illumination(g)
-    gcmask = ogre.adapt_thresh(gc)
-    glabs, gprops = ogre.watershed_label(gcmask, gc)
-
-    rc = ogre.correct_illumination(r)
-    rcmask = ogre.adapt_thresh(rc)
-    rlabs, rprops = ogre.watershed_label(rcmask, rc)
-
-    break
 #%%
-    bmask = (blabs != 0)
-    gmask = (glabs != 0)
-    rmask = (rlabs != 0)
-    #plt.imshow(gmask*2+bmask, cmap=plt.cm.gray)
+#files = 0
+#f = w1_files[files]
 
-    dapi = bc*bmask
-    fitc = gc*gmask
-    texas = rc*rmask
+    
+#row = w1_files.index(f)
+#path, name = os.path.split(f)
+
+#print "Status Update:"
+#print "File: {0}".format(f)
+#print "Item: {0}/{1}".format(row, w1_files_length)
+
+#img = ogre.site_to_array(f)
 
 #%%
 
-    sel = 10
+#b = img[:, :, 0] # DAPI
+#g = img[:, :, 1] # FITC
+#r = img[:, :, 2] # TexasRed
 
-    plive = ogre.pearsonr((dapi*(blabs == sel)).flatten(), fitc.flatten())
-    pdead = ogre.pearsonr((dapi*(blabs == sel)).flatten(), texas.flatten())
-    print 'plive = {0}, pdead = {1}'.format(plive, pdead)
+b = plt.imread('20150421-BCP-WTC11-chip2-full_A03_s54_w1_TimePoint_1.TIF')
+g = plt.imread('20150421-BCP-WTC11-chip2-full_A03_s54_w2_TimePoint_1.TIF')
+r = np.zeros_like(b)
 
-    plive2 = ogre.pearsonr2(dapi*(blabs == sel), fitc)
-    pdead2 = ogre.pearsonr2(dapi*(blabs == sel), texas)
-    print 'plive2 = {0}, pdead2 = {1}'.format(plive2, pdead2)
+#%%
 
-    mlive = ogre.mandersr(dapi*(blabs == sel), fitc)
-    mdead = ogre.mandersr(dapi*(blabs == sel), texas)
-    print 'mlive = {0}, mdead = {1}'.format(mlive, mdead)
+bc = ogre.correct_illumination(b)
+bcmask = ogre.adapt_thresh(bc)
+blabs, bprops = ogre.watershed_label(bcmask, bc)
 
-    klive = ogre.overlapk(dapi*(blabs == sel), fitc)
-    kdead = ogre.overlapk(dapi*(blabs == sel), texas)
-    print 'klive = {0}, kdead = {1}'.format(klive, kdead)
+gc = ogre.correct_illumination(g)
+gcmask = ogre.adapt_thresh(gc)
+glabs, gprops = ogre.watershed_label(gcmask, gc)
 
-    Mlive = ogre.overlapM(dapi*(blabs == sel), fitc, bmask, gmask)
-    Mdead = ogre.overlapM(dapi*(blabs == sel), texas, bmask, rmask)
-    print 'Mlive = {0}, Mdead = {1}'.format(Mlive, Mdead)
+rc = ogre.correct_illumination(r)
+rcmask = ogre.adapt_thresh(rc)
+rlabs, rprops = ogre.watershed_label(rcmask, rc)
+    
+
+#%%
+bmask = (blabs != 0)
+gmask = (glabs != 0)
+rmask = (rlabs != 0)
+#plt.imshow(gmask*2+bmask, cmap=plt.cm.gray)
+
+dapi = bc*bmask
+fitc = gc*gmask
+texas = rc*rmask
+
+plt.imshow(bmask) #show image
+
+#%%
+#Define selector to select cell from image
+sel = 50
+bsel = dapi*(blabs == sel)
+gsel = fitc*(blabs == sel)
+rsel = texas*(blabs == sel)
+
+from scipy.stats import pearsonr
+
+plive = pearsonr((bc*(blabs == sel)).flatten(), gc.flatten())[0]
+pdead = pearsonr((bc*(blabs == sel)).flatten(), rc.flatten())[0]
+print 'plive = {0}, pdead = {1}'.format(plive, pdead)
+
+plive1 = ogre.pearsonr((bc*(blabs == sel)).flatten(), gc.flatten())[0]
+pdead1 = ogre.pearsonr((bc*(blabs == sel)).flatten(), rc.flatten())[0]
+print 'plive1 = {0}, pdead1 = {1}'.format(plive1, pdead1)
+
+plive2 = ogre.pearsonr2(bc*(blabs == sel), gc)
+pdead2 = ogre.pearsonr2(bc*(blabs == sel), rc)
+print 'plive2 = {0}, pdead2 = {1}'.format(plive2, pdead2)
+
+
+mlive = ogre.mandersr(bc*(blabs == sel), gc)
+mdead = ogre.mandersr(bc*(blabs == sel), rc)
+print 'mlive = {0}, mdead = {1}'.format(mlive, mdead)
+
+klive = ogre.overlapk(bc*(blabs == sel), gc)
+kdead = ogre.overlapk(bc*(blabs == sel), rc)
+print 'klive = {0}, kdead = {1}'.format(klive, kdead)
+
+Mlive = ogre.overlapM(bc*(blabs == sel), gc, bmask, gmask)
+Mdead = ogre.overlapM(bc*(blabs == sel), rc, bmask, rmask)
+print 'Mlive = {0}, Mdead = {1}'.format(Mlive, Mdead)
 
 #    pearson = ogre.calc_PCC_fromlabs(blabs, bc, gc)
 #    print pearson
 
 #%%
-    coef = ogre.calc_coloc_fromlabs(blabs, bc, gc, gmask)
+#scattergram(x, y)
+'''USE REGIONPROPS TO SELECT INDIVIDUAL CELLS FOR ANALYSIS AND VISUALIZATION!!!'''
+sg = sns.jointplot(bc[bprops[sel].coords], gc[bprops[sel].coords])#, xlim=(2000, 2500), ylim=(2000, 2500))
+sg.set_axis_labels(xlabel="DAPI", ylabel="FITC")
+
+
 #%%
-    from scipy.stats import pearsonr
+plt.imshow(bsel + gsel)
+#%%
+plt.imshow(bsel + rsel)
+#    coef = ogre.calc_coloc_fromlabs(blabs, bc, gc, gmask)
+#%%
 
 
+plt.imshow(bmask)
 
 #%%
 

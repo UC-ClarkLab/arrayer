@@ -518,8 +518,9 @@ def pearsonr(x, y):
     xm, ym = x-mx, y-my
     r_num = np.add.reduce(xm * ym)
     r_den = np.sqrt(ss(xm) * ss(ym))
+    print r_den
     r = r_num / r_den
-
+#    print r_num, r_den
     # Presumably, if abs(r) > 1, then it is only some small artifact of floating
     # point arithmetic.
     r = max(min(r, 1.0), -1.0)
@@ -560,13 +561,14 @@ def pearsonr2(x, y):
     my = y.mean()
     xm, ym = x-mx, y-my
     r_num = np.add.reduce(xm * ym)
-    r_den = np.sqrt(ss(xm) * ss(ym))
+    r_den = np.sqrt(sum_squares(xm) * sum_squares(ym))
     r = r_num / r_den    
+#    print r_num, r_den
     
-    r_num = flat_sum(x - x.mean()) * flat_sum(y - y.mean())
-    r_den = np.sqrt(flat_sum(np.square(x - x.mean(), dtype=np.float64)) * flat_sum(np.square(y - y.mean(), dtype=np.float64)))
-    print r_num, r_den
-    r = r_num / r_den
+#    r_num = flat_sum(x - x.mean()) * flat_sum(y - y.mean())
+#    r_den = np.sqrt(flat_sum(np.square(x - x.mean(), dtype=np.float64)) * flat_sum(np.square(y - y.mean(), dtype=np.float64)))
+#    print r_num, r_den
+#    r = r_num / r_den
     return r
 
 def mandersr(x, y):
