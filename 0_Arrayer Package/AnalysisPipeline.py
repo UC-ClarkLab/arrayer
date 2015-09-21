@@ -94,53 +94,74 @@ plt.imshow(bmask) #show image
 
 #%%
 #Define selector to select cell from image
-sel = 50
-bsel = dapi*(blabs == sel)
-gsel = fitc*(blabs == sel)
-rsel = texas*(blabs == sel)
+sel = 20
+bsel = bc*(blabs == sel)
+gsel = gc*(blabs == sel)
+rsel = rc*(blabs == sel)
 
-from scipy.stats import pearsonr
-
-plive = pearsonr((bc*(blabs == sel)).flatten(), gc.flatten())[0]
-pdead = pearsonr((bc*(blabs == sel)).flatten(), rc.flatten())[0]
-print 'plive = {0}, pdead = {1}'.format(plive, pdead)
-
-plive1 = ogre.pearsonr((bc*(blabs == sel)).flatten(), gc.flatten())[0]
-pdead1 = ogre.pearsonr((bc*(blabs == sel)).flatten(), rc.flatten())[0]
-print 'plive1 = {0}, pdead1 = {1}'.format(plive1, pdead1)
-
-plive2 = ogre.pearsonr2(bc*(blabs == sel), gc)
-pdead2 = ogre.pearsonr2(bc*(blabs == sel), rc)
-print 'plive2 = {0}, pdead2 = {1}'.format(plive2, pdead2)
-
-
-mlive = ogre.mandersr(bc*(blabs == sel), gc)
-mdead = ogre.mandersr(bc*(blabs == sel), rc)
-print 'mlive = {0}, mdead = {1}'.format(mlive, mdead)
-
-klive = ogre.overlapk(bc*(blabs == sel), gc)
-kdead = ogre.overlapk(bc*(blabs == sel), rc)
-print 'klive = {0}, kdead = {1}'.format(klive, kdead)
-
-Mlive = ogre.overlapM(bc*(blabs == sel), gc, bmask, gmask)
-Mdead = ogre.overlapM(bc*(blabs == sel), rc, bmask, rmask)
-print 'Mlive = {0}, Mdead = {1}'.format(Mlive, Mdead)
-
-#    pearson = ogre.calc_PCC_fromlabs(blabs, bc, gc)
-#    print pearson
-
+#bsel = dapi*(blabs == sel)
+#gsel = fitc*(blabs == sel)
+#rsel = texas*(blabs == sel)
 #%%
+def bbox_slice(array, bbox_tuple):
+    min_row, min_col, max_row, max_col = bbox_tuple
+    out = array[min_row:max_row, min_col:max_col]
+    return out
+
+bcslice = bbox_slice(bc, bprops[sel].bbox)
+gcslice = bbox_slice(gc, bprops[sel].bbox)
+rcslice = bbox_slice(rc, bprops[sel].bbox)
 #scattergram(x, y)
 '''USE REGIONPROPS TO SELECT INDIVIDUAL CELLS FOR ANALYSIS AND VISUALIZATION!!!'''
-sg = sns.jointplot(bc[bprops[sel].coords], gc[bprops[sel].coords])#, xlim=(2000, 2500), ylim=(2000, 2500))
+sg = sns.jointplot(bcslice, gcslice)#, xlim=(2000, 2500), ylim=(2000, 2500))
 sg.set_axis_labels(xlabel="DAPI", ylabel="FITC")
 
 
+#%%
+plt.imshow(bbox_slice(gc, bprops[sel].bbox))
+
+
+#%%
+plt.imshow(gc + 0.5*bsel, cmap='bwr')
+plt.tight_layout()
 #%%
 plt.imshow(bsel + gsel)
 #%%
 plt.imshow(bsel + rsel)
 #    coef = ogre.calc_coloc_fromlabs(blabs, bc, gc, gmask)
+#%%
+from scipy.stats import pearsonr
+
+plive = pearsonr(bcslice.flatten(), gcslice.flatten())[0]
+pdead = pearsonr(bcslice.flatten(), rcslice.flatten())[0]
+print 'plive = {0}, pdead = {1}'.format(plive, pdead)
+
+plive1 = ogre.pearsonr(bcslice.flatten(), gcslice.flatten())[0]
+pdead1 = ogre.pearsonr(bcslice.flatten(), rcslice.flatten())[0]
+print 'plive1 = {0}, pdead1 = {1}'.format(plive1, pdead1)
+
+plive2 = ogre.pearsonr2(bcslice, gcslice)
+pdead2 = ogre.pearsonr2(bcslice, rcslice)
+print 'plive2 = {0}, pdead2 = {1}'.format(plive2, pdead2)
+
+
+mlive = ogre.mandersr(bcslice, gcslice)
+mdead = ogre.mandersr(bcslice, rcslice)
+print 'mlive = {0}, mdead = {1}'.format(mlive, mdead)
+
+klive = ogre.overlapk(bcslice, gcslice)
+kdead = ogre.overlapk(bcslice, rcslice)
+print 'klive = {0}, kdead = {1}'.format(klive, kdead)
+
+'''need to figure out how the masks should work for bmask, gmask, and rmask'''
+#Mlive = ogre.overlapM(bcslice, gcslice, bbox_slice(bc*(blabs == sel), bprops[sel].bbox), bbox_slice(gc*(blabs == sel), bprops[sel].bbox))
+#Mdead = ogre.overlapM(bcslice, gcslice, bmask, rmask)
+#print 'Mlive = {0}, Mdead = {1}'.format(Mlive, Mdead)
+
+#    pearson = ogre.calc_PCC_fromlabs(blabs, bc, gc)
+#    print pearson
+
+
 #%%
 
 
